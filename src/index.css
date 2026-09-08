@@ -1,0 +1,63 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+
+  --color-booth-ink: #1a1210;
+  --color-booth-cream: #fff6ef;
+  --color-booth-blush: #f7d9cf;
+  --color-booth-crimson: #b42318;
+  --color-booth-crimson-deep: #7a140e;
+  --color-booth-amber: #f0a202;
+  --color-booth-mint: #c8e87c;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--color-booth-ink);
+    background-color: var(--color-booth-cream);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button {
+    font-family: inherit;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .booth-grain {
+    background-image:
+      radial-gradient(circle at 12% 18%, rgb(240 162 2 / 0.18), transparent 34%),
+      radial-gradient(circle at 88% 12%, rgb(180 35 24 / 0.16), transparent 36%),
+      radial-gradient(circle at 70% 88%, rgb(200 232 124 / 0.14), transparent 40%),
+      linear-gradient(160deg, #fff6ef 0%, #f8e4d8 48%, #f3d2c4 100%);
+  }
+
+  .booth-checker {
+    background-image:
+      linear-gradient(45deg, rgb(26 18 16 / 0.06) 25%, transparent 25%),
+      linear-gradient(-45deg, rgb(26 18 16 / 0.06) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgb(26 18 16 / 0.06) 75%),
+      linear-gradient(-45deg, transparent 75%, rgb(26 18 16 / 0.06) 75%);
+    background-size: 18px 18px;
+    background-position:
+      0 0,
+      0 9px,
+      9px -9px,
+      -9px 0;
+  }
+}
