@@ -148,6 +148,14 @@ export function useCamera(enabled: boolean) {
     setIsSwitching(false)
   }, [canSwitch, isSwitching])
 
+  const selectCamera = useCallback(
+    (nextFacing: FacingMode) => {
+      if (!canSwitch || isSwitching) return
+      setFacingMode(nextFacing)
+    },
+    [canSwitch, isSwitching],
+  )
+
   const retry = useCallback(() => {
     void startStream(facingMode)
   }, [facingMode, startStream])
@@ -160,6 +168,7 @@ export function useCamera(enabled: boolean) {
     canSwitch,
     error,
     switchCamera,
+    selectCamera,
     retry,
     stop: stopStream,
   }

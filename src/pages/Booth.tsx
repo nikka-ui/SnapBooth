@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { CameraControls } from '../components/camera/CameraControls'
 import { CameraPreview } from '../components/camera/CameraPreview'
 import { CaptureFlash } from '../components/photobooth/CaptureFlash'
@@ -25,18 +25,8 @@ export function Booth({
   onCapture,
   onComplete,
 }: BoothProps) {
-  const autoRunRef = useRef(false)
-  const {
-    videoRef,
-    facingMode,
-    isReady,
-    isSwitching,
-    canSwitch,
-    error,
-    switchCamera,
-    retry,
-    stop,
-  } = useCamera(true)
+  const { videoRef, facingMode, isReady, isSwitching, canSwitch, error, selectCamera, retry, stop } =
+    useCamera(true)
 
   useEffect(() => {
     return () => {
@@ -57,29 +47,8 @@ export function Booth({
   }, [facingMode, onCapture, videoRef])
 
   const startPose = useCallback(() => {
-    autoRunRef.current = true
     onBeginCountdown(runCapture)
   }, [onBeginCountdown, runCapture])
-
-  useEffect(() => {
-    if (
-      autoRunRef.current &&
-      session.status === 'ready' &&
-      session.capturedPhotos.length > 0 &&
-      session.capturedPhotos.length < layout.slots.length
-    ) {
-      const timer = window.setTimeout(() => {
-        onBeginCountdown(runCapture)
-      }, 400)
-      return () => window.clearTimeout(timer)
-    }
-  }, [
-    layout.slots.length,
-    onBeginCountdown,
-    runCapture,
-    session.capturedPhotos.length,
-    session.status,
-  ])
 
   const displayIndex = Math.min(session.currentPhotoIndex + 1, layout.slots.length)
   const lastPhoto = session.capturedPhotos[session.capturedPhotos.length - 1]
@@ -119,7 +88,7 @@ export function Booth({
                 className="h-full w-full rounded-[1.5rem] object-cover"
               />
               <p className="absolute bottom-8 left-0 right-0 text-center text-sm font-semibold tracking-wide">
-                Nice! Next pose coming up…
+                Nice! Pick a camera for the next photo.
               </p>
             </div>
           )}
@@ -145,27 +114,27 @@ export function Booth({
           ) : (
             <>
               <p className="text-center text-sm text-booth-cream/70">
-                {session.capturedPhotos.length === 0
-                  ? 'Get ready!'
+                {session.status === 'countdown' || session.status === 'capturing'
+                  ? 'Hold your pose'
                   : session.status === 'reviewing'
                     ? 'Looking good'
-                    : 'Hold your pose'}
+                    : canSwitch
+                      ? `Photo ${displayIndex} of ${layout.slots.length}: choose a camera, then tap start`
+                      : `Photo ${displayIndex} of ${layout.slots.length}: tap start when ready`}
               </p>
-              <div className="flex gap-3">
-                <CameraControls
-                  canSwitch={canSwitch}
-                  isSwitching={isSwitching}
-                  onSwitch={() => void switchCamera()}
-                  disabled={busy}
-                />
-                <Button
-                  onClick={startPose}
-                  disabled={!isReady || busy}
-                  className="min-h-14 flex-1 text-lg"
-                >
-                  {session.capturedPhotos.length === 0 ? 'Start Session' : 'Capture Next'}
-                </Button>
-              </div>
+              <CameraControls
+                canSwitch={canSwitch}
+                facingMode={facingMode}
+                onSelect={selectCamera}
+                disabled={busy || isSwitching}
+              />
+              <Button
+                onClick={startPose}
+                disabled={!isReady || busy}
+                className="min-h-14 w-full text-lg"
+              >
+                {`Start Photo ${displayIndex}`}
+              </Button>
             </>
           )}
 
