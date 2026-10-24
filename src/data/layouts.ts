@@ -22,6 +22,22 @@ export const layouts: LayoutConfig[] = [
       { id: 'p3', x: 985, y: 3967, width: 1693, height: 1076, fit: 'cover' },
     ],
   },
+  {
+    id: 'our-memories',
+    name: 'Our Memories',
+    description: '3-photo strip on textured paper, titled Our Memories.',
+    canvas: {
+      width: 3750,
+      height: 5625,
+    },
+    frameSrc: `${import.meta.env.BASE_URL}layouts/our-memories.png`,
+    thumbnailSrc: `${import.meta.env.BASE_URL}layouts/our-memories.png`,
+    slots: [
+      { id: 'p1', x: 599, y: 1373, width: 2567, height: 1102, fit: 'cover' },
+      { id: 'p2', x: 599, y: 2753, width: 2567, height: 1102, fit: 'cover' },
+      { id: 'p3', x: 599, y: 4133, width: 2567, height: 1102, fit: 'cover' },
+    ],
+  },
 ]
 
 export function getLayoutById(id: string): LayoutConfig | undefined {

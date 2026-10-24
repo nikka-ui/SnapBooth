@@ -29,7 +29,7 @@ export function LayoutSelection({
           </button>
           <h1 className="font-display text-4xl font-extrabold tracking-tight">Select your frame</h1>
           <p className="text-booth-ink/70">
-            More frames can be added later — start with Retro Classic.
+            Choose a frame for your three-photo strip.
           </p>
         </header>
 
